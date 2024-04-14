@@ -1,12 +1,43 @@
-export default function Listitem() {
+export default function Listitem({ item, setTodo }) {
+	const onCompleteTodo = () => {
+		setTodo((preTodos: any) =>
+			preTodos.map((todo: any) =>
+				todo.id === item.id
+					? { ...todo, is_completed: !todo.is_completed }
+					: todo
+			)
+		);
+	};
+
+	const onRemoveTodo = () => {
+		setTodo((preTodo: any) =>
+			// preTodo.filter((todo: any) => todo.id != item.id)
+			preTodo.filter((todo: any) => {
+				return todo.id != item.id;
+			})
+		);
+	};
+
+	const onEditTodo = () => {};
 	return (
-		<div className="wrapper-list-item flex items-center justify-between text-white border-2 border-[#9b8f7b] px-4 py-2 rounded-lg">
-			<div className="item-desc flex items-center justify-start space-x-2">
-				<div className="item-status w-4 h-4 bg-[#88ab33] rounded-full"></div>
-				<p className="text-sm">Task 01</p>
+		<li className="wrapper-list-item flex items-center justify-between text-white border-2 border-[#9b8f7b] px-4 py-2 rounded-lg mb-6">
+			<div
+				onClick={onCompleteTodo}
+				className="item-desc cursor-pointer flex items-center justify-start space-x-2"
+			>
+				<div
+					className={`item-status w-4 h-4 rounded-full ${
+						item.is_completed
+							? " bg-[#88ab33]"
+							: "bg-transparent border-2 border-[#88ab33]"
+					}`}
+				></div>
+				<p className={`text-sm ${item.is_completed ? "line-through" : ""}`}>
+					{item.title}
+				</p>
 			</div>
 			<div className="item-actions flex items-center justify-start space-x-2">
-				<button type="button">
+				<button type="button" onClick={onEditTodo}>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
@@ -22,7 +53,7 @@ export default function Listitem() {
 						/>
 					</svg>
 				</button>
-				<button type="button">
+				<button type="button" onClick={onRemoveTodo}>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
@@ -39,6 +70,6 @@ export default function Listitem() {
 					</svg>
 				</button>
 			</div>
-		</div>
+		</li>
 	);
 }
